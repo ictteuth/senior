@@ -37,7 +37,7 @@ void initLED()
     PM5CTL0 &= ~LOCKLPM5;
 
     TB0CCTL0 |= CCIE;
-    TB0CCR0 = 0x07FF;  //timing
+    TB0CCR0 = 0x00FF;  //timing
     TB0CTL |= TBSSEL__SMCLK | MC__UP | ID__8;
 
     __bis_SR_register(GIE);

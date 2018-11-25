@@ -73,6 +73,12 @@ void initLED()
  */
 void changePixel(int x, int y, char rgb)
 {
+    if (x < 0 || x > 11 || y < 0 || y > 11)
+    {
+        return;
+    }
+
+
     char* b = &imgArr[y][3*x];
     char* g = b+1;
     char* r = b+2;

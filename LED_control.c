@@ -51,17 +51,18 @@ void initLED()
     {
         for (y = 0; y < 36; y++)
         {
-            changePixel(x, y, 0b01100011);
+//            changePixel(x, y, 0b00000011);
+            changePixel(x,y,11*(x+y));
         }
     }
 
-    changePixel(2, 0, 0b00000011);
-    changePixel(2, 1, 0b00000001);
-    changePixel(2, 2, 0b00011100);
-
-    changePixel(0, 0, 0b00000011);
-    changePixel(0, 1, 0b00000100);
-    changePixel(0, 2, 0b00111100);
+//    changePixel(2, 0, 0b00000011);
+//    changePixel(2, 1, 0b00000001);
+//    changePixel(2, 2, 0b00011100);
+//
+//    changePixel(0, 0, 0b00000011);
+//    changePixel(0, 1, 0b00000100);
+//    changePixel(0, 2, 0b00111100);
 
 
 }
@@ -310,7 +311,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -326,7 +327,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -342,7 +343,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -365,7 +366,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -381,7 +382,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -397,7 +398,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -413,7 +414,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;
@@ -429,7 +430,7 @@ void updateColumns(int row, char mask)
 
     //small delay
     i = 0;
-    do {i++;} while (i < 10);
+    do {i++;} while (i < 5);
 
     //disable output
     P4OUT &= ~BIT3;

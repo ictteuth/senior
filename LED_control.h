@@ -18,6 +18,8 @@
 //#define MASK7 0b10000000
 
 // array that holds all rgb values for pixels in order useful for programming
+// due to a slight mistake, the color order is blue-green-red in this array
+//  and on the physical board.
 char imgArr[12][36];
 
 // variable that keeps track of which row is currently on

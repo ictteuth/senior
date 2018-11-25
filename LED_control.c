@@ -73,9 +73,9 @@ void initLED()
  */
 void changePixel(int x, int y, char rgb)
 {
-    char* r = &imgArr[y][3*x];
+    char* b = &imgArr[y][3*x];
     char* g = r+1;
-    char* b = r+2;
+    char* r = r+2;
 
     char val;
 

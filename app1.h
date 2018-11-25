@@ -14,6 +14,8 @@
 
 int xSpot;
 int ySpot;
+int bright;
+int aColor;
 
 void initTimerB1();
 

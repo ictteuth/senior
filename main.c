@@ -1,5 +1,6 @@
 #include <msp430.h>
 #include "LED_control.h"
+#include "app1.h"
 
 
 /**
@@ -12,6 +13,7 @@ int main(void)
 	CSCTL1 |= DCORSEL_7; //speed up clock
 
 	initLED();
+	initTimerB1();
 
 	return 0;
 }

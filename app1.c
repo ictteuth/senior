@@ -15,12 +15,16 @@
 
 void initTimerB1()
 {
+    TB1CTL |= BIT2; //Clear some stuff
+
     TB1CCTL0 |= CCIE;
-    TB1CCR0 = 0x0FFF;  //timing
+    TB1CCR0 = 0x9FFF;  //timing
     TB1CTL |= TBSSEL__SMCLK | MC__UP | ID__8;
 
-    xSpot = 0;
-    ySpot = 5;
+    xSpot = 1;
+    ySpot = 1;
+    bright = 0;
+    aColor = RED;
 
 }
 
@@ -74,16 +78,34 @@ void drawSpot(int x, int y, int brightness, int color)
 __interrupt void Timer_B1 (void)
 
 {
-    drawSpot(xSpot, ySpot, 5, RED);
-    xSpot++;
-    if (xSpot > 11)
+    drawSpot(xSpot, ySpot, bright>>1, aColor);
+
+    bright++;
+    if (bright > 15)
     {
-        xSpot = 0;
-        ySpot++;
+        bright = 0;
+        ySpot += 3;
+        if (aColor == RED)
+            {
+                aColor = GREEN;
+            }
+            else if (aColor == GREEN)
+            {
+                aColor = BLUE;
+            }
+            else
+            {
+                aColor = RED;
+            }
         if (ySpot > 11)
         {
-            ySpot = 0;
-            setSolidColor(0b00000001);
+            ySpot = 1;
+            xSpot += 3;
+            if (xSpot > 5)
+            {
+                xSpot = 1;
+                setSolidColor(0b11111111);
+            }
         }
     }
 }

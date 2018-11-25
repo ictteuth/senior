@@ -52,7 +52,7 @@ void initLED()
         for (y = 0; y < 36; y++)
         {
 //            changePixel(x, y, 0b00000011);
-            changePixel(x,y,11*(x+y));
+            changePixel(x,y,(x+6*y));
         }
     }
 
@@ -74,8 +74,8 @@ void initLED()
 void changePixel(int x, int y, char rgb)
 {
     char* b = &imgArr[y][3*x];
-    char* g = r+1;
-    char* r = r+2;
+    char* g = b+1;
+    char* r = b+2;
 
     char val;
 
@@ -163,15 +163,15 @@ void changePixel(int x, int y, char rgb)
         break;
 
     case 0b01:
-        val = 0b00000110;
+        val = 0b00000010;
         break;
 
     case 0b10:
-        val = 0b00011110;
+        val = 0b00001110;
         break;
 
     case 0b11:
-        val = 0b01111110;
+        val = 0b11111110;
         break;
     }
     *b = val;

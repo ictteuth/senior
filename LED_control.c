@@ -51,8 +51,8 @@ void initLED()
     {
         for (y = 0; y < 36; y++)
         {
-//            changePixel(x, y, 0b00000011);
-            changePixel(x,y,(x+6*y));
+            changePixel(x, y, 0b00000011);
+//            changePixel(x,y,(x+y)*11);
         }
     }
 
@@ -378,10 +378,10 @@ void updateColumns(int row, char mask)
     P4OUT &= ~BIT3;
 
 
-    updateCol18_22(row, mask);
+    updateCol18_20(row, mask);
 
-    //set select lines to 100
-    P4OUT ^= (BIT7 | BIT5 | BIT6);
+    //set select lines to 111
+    P4OUT ^= BIT7;
 
     //enable output
     P4OUT |= BIT3;
@@ -394,9 +394,9 @@ void updateColumns(int row, char mask)
     P4OUT &= ~BIT3;
 
 
-    updateCol23_27(row, mask);
+    updateCol21_25(row, mask);
 
-    //set select lines to 101
+    //set select lines to 110
     P4OUT ^= BIT6;
 
     //enable output
@@ -410,9 +410,9 @@ void updateColumns(int row, char mask)
     P4OUT &= ~BIT3;
 
 
-    updateCol28_32(row, mask);
+    updateCol26_30(row, mask);
 
-    //set select lines to 110
+    //set select lines to 101
     P4OUT ^= (BIT5 | BIT6);
 
     //enable output
@@ -426,9 +426,9 @@ void updateColumns(int row, char mask)
     P4OUT &= ~BIT3;
 
 
-    updateCol33_35(row, mask);
+    updateCol31_35(row, mask);
 
-    //set select lines to 111
+    //set select lines to 100
     P4OUT ^= BIT6;
 
     //enable output
@@ -676,34 +676,233 @@ void updateCol15_17(int row, char mask)
 }
 
 /*
- * Sends the proper outputs to columns 18 through 22 for the given row
+ * Sends the proper outputs to columns 18 through 20 for the given row
  */
-void updateCol18_22(int row, char mask)
+void updateCol18_20(int row, char mask)
 {
+    char* arrayPtr = &imgArr[row][18];
+
+    //D2
+    if ((*arrayPtr & mask) == 0)
+    {
+        P6OUT &= ~BIT6;
+    }
+    else
+    {
+        P6OUT |= BIT6;
+    }
+
+    //D1
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT4;
+    }
+    else
+    {
+        P2OUT |= BIT4;
+    }
+
+    //D0
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT4;
+    }
+    else
+    {
+        P4OUT |= BIT4;
+    }
+
 
 }
 
 /*
- * Sends the proper outputs to columns 23 through 27 for the given row
+ * Sends the proper outputs to columns 21 through 25 for the given row
  */
-void updateCol23_27(int row, char mask)
+void updateCol21_25(int row, char mask)
 {
+    char* arrayPtr = &imgArr[row][21];
+
+    //D4
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT0;
+    }
+    else
+    {
+        P4OUT |= BIT0;
+    }
+
+    //D3
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT5;
+    }
+    else
+    {
+        P2OUT |= BIT5;
+    }
+
+    //D2
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P6OUT &= ~BIT6;
+    }
+    else
+    {
+        P6OUT |= BIT6;
+    }
+
+    //D1
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT4;
+    }
+    else
+    {
+        P2OUT |= BIT4;
+    }
+
+    //D0
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT4;
+    }
+    else
+    {
+        P4OUT |= BIT4;
+    }
 
 }
 
 /*
- * Sends the proper outputs to columns 28 through 32 for the given row
+ * Sends the proper outputs to columns 26 through 30 for the given row
  */
-void updateCol28_32(int row, char mask)
+void updateCol26_30(int row, char mask)
 {
+    char* arrayPtr = &imgArr[row][26];
+
+    //D4
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT0;
+    }
+    else
+    {
+        P4OUT |= BIT0;
+    }
+
+    //D3
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT5;
+    }
+    else
+    {
+        P2OUT |= BIT5;
+    }
+
+    //D2
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P6OUT &= ~BIT6;
+    }
+    else
+    {
+        P6OUT |= BIT6;
+    }
+
+    //D1
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT4;
+    }
+    else
+    {
+        P2OUT |= BIT4;
+    }
+
+    //D0
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT4;
+    }
+    else
+    {
+        P4OUT |= BIT4;
+    }
 
 }
 
 /*
- * Sends the proper outputs to columns 33 through 35 for the given row
+ * Sends the proper outputs to columns 31 through 35 for the given row
  */
-void updateCol33_35(int row, char mask)
+void updateCol31_35(int row, char mask)
 {
+    char* arrayPtr = &imgArr[row][31];
+
+    //D4
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT0;
+    }
+    else
+    {
+        P4OUT |= BIT0;
+    }
+
+    //D3
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT5;
+    }
+    else
+    {
+        P2OUT |= BIT5;
+    }
+
+    //D2
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P6OUT &= ~BIT6;
+    }
+    else
+    {
+        P6OUT |= BIT6;
+    }
+
+    //D1
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P2OUT &= ~BIT4;
+    }
+    else
+    {
+        P2OUT |= BIT4;
+    }
+
+    //D0
+    arrayPtr++;
+    if ((*arrayPtr & mask) == 0)
+    {
+        P4OUT &= ~BIT4;
+    }
+    else
+    {
+        P4OUT |= BIT4;
+    }
 
 }
 

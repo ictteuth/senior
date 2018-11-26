@@ -70,24 +70,24 @@ void updateCol10_14(int row, char mask);
 void updateCol15_17(int row, char mask);
 
 /*
- * Sends the proper outputs to columns 18 through 22 for the given row
+ * Sends the proper outputs to columns 18 through 20 for the given row
  */
-void updateCol18_22(int row, char mask);
+void updateCol18_20(int row, char mask);
 
 /*
- * Sends the proper outputs to columns 23 through 27 for the given row
+ * Sends the proper outputs to columns 21 through 25 for the given row
  */
-void updateCol23_27(int row, char mask);
+void updateCol21_25(int row, char mask);
 
 /*
- * Sends the proper outputs to columns 28 through 32 for the given row
+ * Sends the proper outputs to columns 26 through 30 for the given row
  */
-void updateCol28_32(int row, char mask);
+void updateCol26_30(int row, char mask);
 
 /*
- * Sends the proper outputs to columns 33 through 35 for the given row
+ * Sends the proper outputs to columns 31 through 35 for the given row
  */
-void updateCol33_35(int row, char mask);
+void updateCol31_35(int row, char mask);
 
 /*
  * Sends active high signal to turn on the next row

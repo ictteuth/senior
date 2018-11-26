@@ -101,7 +101,7 @@ __interrupt void Timer_B1 (void)
         {
             ySpot = 1;
             xSpot += 3;
-            if (xSpot > 5)
+            if (xSpot > 11)
             {
                 xSpot = 1;
                 setSolidColor(0b11111111);

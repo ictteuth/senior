@@ -12,13 +12,29 @@
 #include "LED_control.h"
 #include "display_control.h"
 
+/*
+ * Main loop for program 1
+ * called from main() after menu selection
+ *
+ * Uses time b1 to take measurements of position
+ * draws square under wand
+ * brightness varies with height
+ *
+ *
+ */
+void program1MainLoop()
+{
+
+}
+
+
 
 void initTimerB1()
 {
     TB1CTL |= BIT2; //Clear some stuff
 
     TB1CCTL0 |= CCIE;
-    TB1CCR0 = 0x9FFF;  //timing
+    TB1CCR0 = 0xFFFF;  //timing 9fff
     TB1CTL |= TBSSEL__SMCLK | MC__UP | ID__8;
 
     xSpot = 1;

@@ -51,8 +51,8 @@ void initLED()
     {
         for (y = 0; y < 36; y++)
         {
-            changePixel(x, y, 0b00000011);
-//            changePixel(x,y,(x+y)*11);
+//            changePixel(x, y, 0b00000011);
+            changePixel(x,y,(x+y)*11);
         }
     }
 

@@ -2,6 +2,8 @@
 #include "LED_control.h"
 #include "app1.h"
 
+void showMenu();
+
 
 /**
  * main.c

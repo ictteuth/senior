@@ -17,6 +17,7 @@ int ySpot;
 int bright;
 int aColor;
 
+//sets up timer b1 interrupt and stuff
 void initTimerB1();
 
 
@@ -28,6 +29,16 @@ void initTimerB1();
  */
 void drawSpot(int x, int y, int brightness, int color);
 
-
+/*
+ * Main loop for program 1
+ * called from main() after menu selection
+ *
+ * Uses time b1 to take measurements of position
+ * draws square under wand
+ * brightness varies with height
+ *
+ *
+ */
+void program1MainLoop();
 
 #endif /* APP1_H_ */

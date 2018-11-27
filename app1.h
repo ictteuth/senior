@@ -17,6 +17,13 @@ int ySpot;
 int bright;
 int aColor;
 
+
+float xCurrent;
+float yCurrent;
+float zCurrent;
+
+int positionReady; //flag to tell if new position data is available
+
 //sets up timer b1 interrupt and stuff
 void initTimerB1();
 

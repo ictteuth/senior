@@ -24,6 +24,34 @@
  */
 void program1MainLoop()
 {
+    float xAvg;
+    float yAvg;
+    float zAvg;
+
+    int xInt;
+    int yInt;
+    int zInt;
+
+    while (1)
+    {
+        while (!positionReady); //wait for position data
+        //disregard outliers
+
+        //moving average position data for smoothing
+        xAvg = 0.5*xAvg + 0.5*xCurrent;
+        yAvg = 0.5*yAvg + 0.5*yCurrent;
+        zAvg = 0.5*zAvg + 0.5*zCurrent;
+
+        //round values
+        xInt = (int)(xAvg + 0.5);
+        yInt = (int)(yAvg + 0.5);
+        zInt = (int)(zAvg + 0.5);
+
+
+        //clear screen and draw new square
+        setSolidColor(0b00000001);  //dim blue
+        drawSpot(xAvg, yAvg, zAvg, RED);
+    }
 
 }
 

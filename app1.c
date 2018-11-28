@@ -11,6 +11,8 @@
 #include "app1.h"
 #include "LED_control.h"
 #include "display_control.h"
+#include "antenna_control.h"
+#include "adc.h"
 
 /*
  * Main loop for program 1
@@ -24,13 +26,13 @@
  */
 void program1MainLoop()
 {
-    float xAvg;
-    float yAvg;
-    float zAvg;
+    float xAvg = 0;
+    float yAvg = 0;
+    float zAvg = 0;
 
-    int xInt;
-    int yInt;
-    int zInt;
+    int xInt = 0;
+    int yInt = 0;
+    int zInt = 0;
 
     while (1)
     {
@@ -38,19 +40,31 @@ void program1MainLoop()
         //disregard outliers
 
         //moving average position data for smoothing
-        xAvg = 0.5*xAvg + 0.5*xCurrent;
-        yAvg = 0.5*yAvg + 0.5*yCurrent;
-        zAvg = 0.5*zAvg + 0.5*zCurrent;
+        xAvg = 0.6*xAvg + 0.4*xCurrent;
+        yAvg = 0.6*yAvg + 0.4*(yCurrent-100);
+        zAvg = 0.7*zAvg + (0.3*(zCurrent-300));
 
         //round values
         xInt = (int)(xAvg + 0.5);
         yInt = (int)(yAvg + 0.5);
-        zInt = (int)(zAvg + 0.5);
+        zInt = (int)(zAvg*0.04);
+        if (zInt > 7)
+        {
+            zInt = 7;
+        }
+        else if (zInt < 1)
+        {
+            zInt = 1;
+        }
+
 
 
         //clear screen and draw new square
         setSolidColor(0b00000001);  //dim blue
-        drawSpot(xAvg, yAvg, zAvg, RED);
+        drawSpot(xInt*0.04 + 0, yInt*0.015, 8-zInt, RED); //x testing
+//        drawSpot(5, yInt/30, 7, RED); //y testing
+
+        positionReady = 0;
     }
 
 }
@@ -62,14 +76,14 @@ void initTimerB1()
     TB1CTL |= BIT2; //Clear some stuff
 
     TB1CCTL0 |= CCIE;
-    TB1CCR0 = 0xFFFF;  //timing 9fff
+    TB1CCR0 = 0x7FFF;  //timing 9fff
     TB1CTL |= TBSSEL__SMCLK | MC__UP | ID__8;
 
     xSpot = 1;
     ySpot = 1;
     bright = 0;
     aColor = RED;
-
+    anAxis = 0;
 
     /****************************************************************************************************************************************
     ***********************************************TESTINIG OP AMP CREATURE OF THE DARKNESS**************************************************
@@ -77,8 +91,9 @@ void initTimerB1()
     P2DIR |= BIT0 | BIT1 | BIT2;    //outputs controlling op amp
     opAmpCreatureCounter = 10;
     oacc2 = 0;
-    P2OUT |= BIT2;
-    P2OUT &= ~(BIT0 | BIT1);
+    activateX();
+
+    adc_init();
     /*****************************************************************************************************************************************/
     /*****************************************************************************************************************************************/
 
@@ -135,9 +150,35 @@ void drawSpot(int x, int y, int brightness, int color)
 __interrupt void Timer_B1 (void)
 
 {
-    drawSpot(xSpot, ySpot, bright>>1, aColor);
+//    drawSpot(xSpot, ySpot, bright>>1, aColor);
 
 
+    switch (anAxis)
+    {
+    case 0:
+        xCurrent = find_x();
+        activateY();
+        anAxis = 1;
+        break;
+    case 1:
+        yCurrent = find_y();
+        activateZ();
+        anAxis = 2;
+        break;
+    case 2:
+        zCurrent = find_z();
+        activateX();
+        anAxis = 0;
+        positionReady = 1;
+        break;
+    }
+
+//    xCurrent = find_x();
+//    yCurrent = find_y();
+//    zCurrent = find_z();
+//    positionReady = 1;
+
+    oacc2++;
     /************************************************************************************************************************************/
 //    opAmpCreatureCounter--;
 //    if (opAmpCreatureCounter == 0)
@@ -166,33 +207,33 @@ __interrupt void Timer_B1 (void)
 //    }
 
     /************************************************************************************************************************************/
-    bright++;
-    if (bright > 15)
-    {
-        bright = 0;
-        ySpot += 3;
-        if (aColor == RED)
-            {
-                aColor = GREEN;
-            }
-            else if (aColor == GREEN)
-            {
-                aColor = BLUE;
-            }
-            else
-            {
-                aColor = RED;
-            }
-        if (ySpot > 11)
-        {
-            ySpot = 1;
-            xSpot += 3;
-            if (xSpot > 11)
-            {
-                xSpot = 1;
-                setSolidColor(0b11111111);
-            }
-        }
-    }
+//    bright++;
+//    if (bright > 15)
+//    {
+//        bright = 0;
+//        ySpot += 3;
+//        if (aColor == RED)
+//            {
+//                aColor = GREEN;
+//            }
+//            else if (aColor == GREEN)
+//            {
+//                aColor = BLUE;
+//            }
+//            else
+//            {
+//                aColor = RED;
+//            }
+//        if (ySpot > 11)
+//        {
+//            ySpot = 1;
+//            xSpot += 3;
+//            if (xSpot > 11)
+//            {
+//                xSpot = 1;
+//                setSolidColor(0b11111111);
+//            }
+//        }
+//    }
 }
 

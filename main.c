@@ -19,6 +19,7 @@ int main(void)
 	initLED();
 	initTimerB1();
 
+	program1MainLoop();
 	return 0;
 }
 

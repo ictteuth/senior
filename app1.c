@@ -36,9 +36,72 @@ void program1MainLoop()
 
     while (1)
     {
-        while (!positionReady); //wait for position data
+
+        switch(mode)
+        {
+        case 0:
+            if (isNewMode == 1)
+            {
+                isNewMode = 0;
+                setSolidColor(0b00000001);
+            }
+            while (!positionReady); //wait for position data
+            //disregard outliers
+
+            //moving average position data for smoothing
+            xAvg = 0.6*xAvg + 0.4*xCurrent;
+            yAvg = 0.6*yAvg + 0.4*(yCurrent-100);
+            zAvg = 0.7*zAvg + (0.3*(zCurrent-300));
+
+            //round values
+            xInt = (int)(xAvg + 0.5);
+            yInt = (int)(yAvg + 0.5);
+            zInt = (int)(zAvg*0.04);
+            if (zInt > 7)
+            {
+                zInt = 7;
+            }
+            else if (zInt < 1)
+            {
+                zInt = 1;
+            }
+
+
+
+            //clear screen and draw new square
+            setSolidColor(0b00000001);  //dim blue
+            drawSpot(xInt*0.04 + 0, yInt*0.015, 8-zInt, RED); //x testing
+    //        drawSpot(5, yInt/30, 7, RED); //y testing
+
+            positionReady = 0;
+
+            break;
+
+        case 1:
+            if (isNewMode)
+            {
+                isNewMode = 0;
+                setSolidColor(0b00000100);
+            }
+            break;
+
+        case 2:
+            if (isNewMode)
+            {
+                //reinitialize variables
+                xSpot = 1;
+                ySpot = 1;
+                bright = 0;
+                aColor = RED;
+                isNewMode = 0;
+            }
+            break;
+
+        }//switch(mode)
+//        while (!positionReady); //wait for position data
         //disregard outliers
 
+/*
         //moving average position data for smoothing
         xAvg = 0.6*xAvg + 0.4*xCurrent;
         yAvg = 0.6*yAvg + 0.4*(yCurrent-100);
@@ -65,6 +128,7 @@ void program1MainLoop()
 //        drawSpot(5, yInt/30, 7, RED); //y testing
 
         positionReady = 0;
+        */
     }
 
 }
@@ -97,6 +161,9 @@ void initTimerB1()
     /*****************************************************************************************************************************************/
     /*****************************************************************************************************************************************/
 
+    mode = 0;
+    isNewMode = 1;
+    switchDelay = 50;
 
 }
 
@@ -146,32 +213,146 @@ void drawSpot(int x, int y, int brightness, int color)
 }
 
 
+#pragma vector = PORT2_VECTOR
+__interrupt void Button (void)
+{
+    mode++;
+    if (mode > 2)
+    {
+        mode = 0;
+    }
+    isNewMode = 1;
+
+    P2IFG &= ~BIT6;
+}
+
 #pragma vector = TIMER1_B0_VECTOR
 __interrupt void Timer_B1 (void)
 
 {
-//    drawSpot(xSpot, ySpot, bright>>1, aColor);
-
-
-    switch (anAxis)
+    //    drawSpot(xSpot, ySpot, bright>>1, aColor);
+/*
+    if (switchDelay == 0)
     {
-    case 0:
-        xCurrent = find_x();
-        activateY();
-        anAxis = 1;
+        if (P2IN & BIT6 == 0)
+        {
+            mode++;
+            if (mode > 2)
+            {
+                mode = 0;
+            }
+            switchDelay = 50;
+            isNewMode = 1;
+        }
+    }
+    else
+    {
+        switchDelay--;
+    }
+*/
+    switch(mode)
+    {
+    case 0:     //basic
+        switch (anAxis)
+        {
+        case 0:
+            xCurrent = find_x();
+            activateY();
+            anAxis = 1;
+            break;
+        case 1:
+            yCurrent = find_y();
+            activateZ();
+            anAxis = 2;
+            break;
+        case 2:
+            zCurrent = find_z();
+            activateX();
+            anAxis = 0;
+            positionReady = 1;
+            break;
+        }
+
         break;
-    case 1:
-        yCurrent = find_y();
-        activateZ();
-        anAxis = 2;
+    case 1:     //game
+        switch (anAxis)
+        {
+        case 0:
+            xCurrent = find_x();
+            activateY();
+            anAxis = 1;
+            break;
+        case 1:
+            yCurrent = find_y();
+            activateZ();
+            anAxis = 2;
+            break;
+        case 2:
+            zCurrent = find_z();
+            activateX();
+            anAxis = 0;
+            positionReady = 1;
+            break;
+        }
+
+
         break;
-    case 2:
-        zCurrent = find_z();
-        activateX();
-        anAxis = 0;
+
+    case 2:     //pattern
         positionReady = 1;
+
+        drawSpot(xSpot, ySpot, bright>>1, aColor);
+        bright++;
+        if (bright > 15)
+        {
+            bright = 0;
+            ySpot += 3;
+            if (aColor == RED)
+                {
+                    aColor = GREEN;
+                }
+                else if (aColor == GREEN)
+                {
+                    aColor = BLUE;
+                }
+                else
+                {
+                    aColor = RED;
+                }
+            if (ySpot > 11)
+            {
+                ySpot = 1;
+                xSpot += 3;
+                if (xSpot > 11)
+                {
+                    xSpot = 1;
+                    setSolidColor(0b11111111);
+                }
+            }
+        }
+
         break;
     }
+
+//    switch (anAxis)
+//    {
+//    case 0:
+//        xCurrent = find_x();
+//        activateY();
+//        anAxis = 1;
+//        break;
+//    case 1:
+//        yCurrent = find_y();
+//        activateZ();
+//        anAxis = 2;
+//        break;
+//    case 2:
+//        zCurrent = find_z();
+//        activateX();
+//        anAxis = 0;
+//        positionReady = 1;
+//        break;
+//    }
 
 //    xCurrent = find_x();
 //    yCurrent = find_y();

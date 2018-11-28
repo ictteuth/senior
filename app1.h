@@ -30,12 +30,16 @@ int aColor;
 
 int anAxis;
 
-
 float xCurrent;
 float yCurrent;
 float zCurrent;
 
 int positionReady; //flag to tell if new position data is available
+
+//button stuff
+int mode;
+int isNewMode;
+int switchDelay;
 
 //sets up timer b1 interrupt and stuff
 void initTimerB1();

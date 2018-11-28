@@ -19,6 +19,17 @@ int main(void)
 	initLED();
 	initTimerB1();
 
+
+	//set up gpio for button
+
+	P2DIR &= ~BIT6; //input
+
+	//set up interrupt for button
+	P2IES |= BIT6;
+	P2IE |= BIT6;
+	P2IFG &= ~BIT6;
+
+
 	program1MainLoop();
 	return 0;
 }

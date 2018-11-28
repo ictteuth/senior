@@ -9,13 +9,10 @@
 #define LED_CONTROL_H_
 
 #define MASK0 0b00000001
-//#define MASK1 0b00000010
-//#define MASK2 0b00000100
-//#define MASK3 0b00001000
-//#define MASK4 0b00010000
-//#define MASK5 0b00100000
-//#define MASK6 0b01000000
-//#define MASK7 0b10000000
+
+
+
+
 
 // array that holds all rgb values for pixels in order useful for programming
 // due to a slight mistake, the color order is blue-green-red in this array

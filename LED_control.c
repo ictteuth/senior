@@ -26,10 +26,14 @@ void initLED()
     P3DIR |= 0xFF;
     P5DIR |= BIT1 | BIT2 | BIT3 | BIT4;
 
+//    P2DIR &= ~BIT3;
+
+//    __delay_cycles(100000);
     //data lines and select lines as outputs
-    P2DIR |= BIT4 | BIT5;
-    P4DIR |= BIT0 | BIT3 | BIT4 | BIT5 | BIT6 | BIT7;
-    P6DIR |= BIT6;
+    P2DIR |= /*BIT3 | */BIT4 | BIT5;
+    P4DIR |= BIT0 | BIT1 | BIT3 | BIT4 | BIT5 | BIT6 | BIT7;
+
+
 
     //disable decoder output
     P4OUT &= ~BIT3;
@@ -360,7 +364,7 @@ void updateColumns(int row, char mask)
     /***************************************************************************************************************************/
 //    P4OUT |= BIT4;
 //    P2OUT &= ~BIT4;
-//    P6OUT &= ~BIT6;
+//    P4OUT &= ~BIT1;
     /***************************************************************************************************************************/
 
 
@@ -475,11 +479,11 @@ void updateCol0_4(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D3
@@ -538,11 +542,11 @@ void updateCol5_9(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D3
@@ -602,11 +606,11 @@ void updateCol10_14(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D3
@@ -666,11 +670,11 @@ void updateCol15_17(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
 }
@@ -685,11 +689,11 @@ void updateCol18_20(int row, char mask)
     //D2
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D1
@@ -749,11 +753,11 @@ void updateCol21_25(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D1
@@ -812,11 +816,11 @@ void updateCol26_30(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D1
@@ -875,11 +879,11 @@ void updateCol31_35(int row, char mask)
     arrayPtr++;
     if ((*arrayPtr & mask) == 0)
     {
-        P6OUT &= ~BIT6;
+        P4OUT &= ~BIT1;
     }
     else
     {
-        P6OUT |= BIT6;
+        P4OUT |= BIT1;
     }
 
     //D1
@@ -917,7 +921,7 @@ __interrupt void Timer_B (void)
 //#error Compiler not supported!
 //#endif
 {
-    P2OUT ^= BIT2;
+   // P2OUT ^= BIT2;
     updateISR();
 }
 

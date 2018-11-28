@@ -8,11 +8,14 @@
 #include <msp430.h>
 #include <msp430fr2355.h>
 
+#include <stdlib.h>
+
 #include "app1.h"
 #include "LED_control.h"
 #include "display_control.h"
 #include "antenna_control.h"
 #include "adc.h"
+#include "lcd.h"
 
 /*
  * Main loop for program 1
@@ -70,7 +73,7 @@ void program1MainLoop()
 
             //clear screen and draw new square
             setSolidColor(0b00000001);  //dim blue
-            drawSpot(xInt*0.04 + 0, yInt*0.015, 8-zInt, RED); //x testing
+            drawSpot(xInt*0.04 + 0, yInt*0.023, 8-zInt, RED); //x testing
     //        drawSpot(5, yInt/30, 7, RED); //y testing
 
             positionReady = 0;
@@ -82,8 +85,115 @@ void program1MainLoop()
             {
                 isNewMode = 0;
                 setSolidColor(0b00000100);
+                cursorX = 0;
+                cursorY = 0;
+                moleX = (rand() % 10)+1;    //random int 1 to 10
+                moleY = (rand() % 10)+1;
+                drawSpot(moleX, moleY, 7, RED);
+                isOver = 0;
+                isUp = 0;
+                wasUp = 0;
+
             }
+
+            while (!positionReady); //wait for position data
+            //disregard outliers
+
+            //moving average position data for smoothing
+            xAvg = 0.7*xAvg + 0.3*xCurrent;
+            yAvg = 0.7*yAvg + 0.3*(yCurrent-100);
+            zAvg = 0.7*zAvg + (0.3*(zCurrent-300));
+
+            //round values
+            xInt = (int)(xAvg*0.04 + 0.5);
+            yInt = (int)(yAvg*0.023 + 0.5);
+            zInt = (int)(zAvg*0.04 + 0.5);
+            if (zInt > 7)
+            {
+                zInt = 7;
+            }
+            else if (zInt < 1)
+            {
+                zInt = 1;
+            }
+
+            wasUp = isUp;
+
+            if (zInt >= 4)
+            {
+                isUp = 1;
+            }
+            else
+            {
+                isUp = 0;
+            }
+
+            //if it was previously not over the mole, erase the cursor
+            if (!isOver)
+            {
+                changePixel(cursorX, cursorY, 0b00000100);
+            }
+
+            //check if new position is over the mole
+            if (xInt >= moleX-1 && xInt <= moleX+1 &&
+                    yInt >= moleY-1 && yInt <= moleY+1)
+            {
+                if (!isOver)//past value
+                {
+                    if (isUp)
+                    {
+                        drawSpot(moleX, moleY, 7, BLUE);
+                    }
+                    else if (!isUp && !wasUp)
+                    {
+                        drawSpot(moleX, moleY, 1, RED);
+                    }
+                }
+                else if (isUp && !wasUp)
+                {
+                    drawSpot(moleX, moleY, 7, BLUE);
+                }
+                else if (!isUp && wasUp)
+                {
+                    isNewMode = 1;
+                    continue;
+                }
+                isOver = 1;
+
+            }
+            else
+            {
+                if (isOver)//past value
+                {
+                    drawSpot(moleX, moleY, 7, RED);
+                }
+                isOver = 0;
+
+            }
+
+            cursorX = xInt;
+            cursorY = yInt;
+
+            if (!isOver)
+            {
+                //draw the cursor
+                if (isUp)
+                {
+                    changePixel(cursorX, cursorY, 0b00011100);
+                }
+                else
+                {
+                    changePixel(cursorX, cursorY, 0b11101000);
+
+                }
+
+            }
+
+
+            positionReady = 0;
+
             break;
+
 
         case 2:
             if (isNewMode)
@@ -95,7 +205,6 @@ void program1MainLoop()
                 aColor = RED;
                 isNewMode = 0;
             }
-            break;
 
         }//switch(mode)
 //        while (!positionReady); //wait for position data
@@ -163,6 +272,7 @@ void initTimerB1()
 
     mode = 0;
     isNewMode = 1;
+    lcd_str("Wand Tracker");
     switchDelay = 50;
 
 }
@@ -217,11 +327,32 @@ void drawSpot(int x, int y, int brightness, int color)
 __interrupt void Button (void)
 {
     mode++;
+
+    lcd_command(0x01);
+    lcd_command(0x02);
+
     if (mode > 2)
     {
         mode = 0;
     }
     isNewMode = 1;
+
+    switch(mode)
+    {
+    case 0:
+        lcd_str("Wand Tracker");
+        break;
+    case 1:
+        lcd_str("Smack-a-Rodent");
+        break;
+    case 2:
+        lcd_str("Screen Saver");
+        break;
+    default:
+        lcd_str("Something Died");
+        break;
+    }
+
 
     P2IFG &= ~BIT6;
 }

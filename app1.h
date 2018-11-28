@@ -34,6 +34,17 @@ float xCurrent;
 float yCurrent;
 float zCurrent;
 
+int moleX;
+int moleY;
+
+int cursorX;
+int cursorY;
+
+int isOver;
+int isUp;
+int wasUp;
+
+
 int positionReady; //flag to tell if new position data is available
 
 //button stuff
